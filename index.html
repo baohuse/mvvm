@@ -14,6 +14,7 @@
     </div>
 </body>
 <script src="compile.js"></script>
+<script src="observe.js"></script>
 <script>
 
     var data = {
@@ -22,7 +23,31 @@
         love: '做有意义的事'
     }
 
-    var compile = new Compile('#app', data);
+    
+    //刚才实现了将数据渲染到view，那么怎样在修改data属性的时候，视图跟着变化呢,欢迎收看observe
 
+    //为data的name属性设置getter/setter
+    // var value
+    // Object.defineProperty(data,"name", {
+    //     set: function(newValue) {
+    //         console.log('set', newValue)
+    //         return value = newValue
+    //     },
+    //     get: function() {
+    //         console.log('get')
+    //         return value
+    //     }
+    // })
+    // data.name = '大魔王';
+    // console.log(data.name);
+
+    
+    var observe = new Observe(data, (oldValue,newValue) => {
+        console.log('----',oldValue,newValue);
+        var compile= new Compile('#app', data);
+    })
+   // var compile = new Compile('#app', data);
+    data.name = '大魔王';
+    console.log(data);
 </script>
 </html>

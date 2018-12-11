@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <div>
+        <h1>什么是订阅发布</h1>
+    </div>
+</body>
+<script>
+    let dep = []
+    function said(){
+        console.log('将函数push进数组里面（订阅），循环数组依次执行')
+    }
+    function next(){
+        console.log('我是即将被订阅的函数')
+    }
+    function ee() {
+        console.log('faker')
+    }
+
+    dep.push(said)
+    dep.push(next)
+    dep.push(ee)
+
+    dep.forEach( ele => ele())
+
+</script>
+</html>
