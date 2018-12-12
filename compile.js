@@ -23,9 +23,13 @@ class Compile {
             let txt = node.textContent;
             let reg = /\{\{(.*?)\}\}/g;
             if (node.nodeType === 3 && reg.test(txt)) {
-                node.textContent = txt.replace(reg, (matched, placeholder) => {
-                    return this.data[placeholder]
-                })
+                //做替换
+                replaceTxt();
+                function replaceTxt() {
+                    node.textContent = txt.replace(reg, (matched, placeholder) => {
+                        return this.data[placeholder]
+                    })
+                }      
             }
 
             if(node.childNodes && node.childNodes.length) {
