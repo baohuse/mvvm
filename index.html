@@ -79,6 +79,7 @@
 
     function Compile(el, vm) {
         vm.$el = document.querySelector(el);
+        let val = vm._data;
         let fragement = document.createDocumentFragment();
         fragement.append(vm.$el);
         fragement.childNodes
@@ -86,10 +87,27 @@
             Array.from(frag.childNodes).forEach(node => {
                 let txt = node.textContent;
                 let reg = /\{\{(.*?)\}\}/g;
+                if(node.nodeType === 1) {
+                    //节点元素 <input v-mode="name" />                   
+                    const nodeAttr = node.attributes; // 伪数组
+                    //找到包含v-的属性
+                    //console.log(nodeAttr);
+                    Array.from(nodeAttr).forEach(attr => {
+                        let name = attr.name;
+                        let exp = attr.value;
+                        //indexOf判断name属性名里面是否包含v-model
+                        if(name.includes('v-')) {
+                            node.value = val[exp]
+                            node.addEventListener('input', e => {
+                                val[exp] = e.target.value
+                            })
+                        } 
+                    })
+                }
                 if(node.nodeType === 3 && reg.test(txt)) {
                     replaceTxt()
                     function replaceTxt() {
-                        let val = vm._data;
+                        
                         //console.log(val)
                         node.textContent = txt.replace(reg, (matched, placeholder) => {
                             //console.log(matched, placeholder)
