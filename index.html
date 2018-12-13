@@ -16,7 +16,8 @@
         <ul>
 			<li>{{team.one}}</li>
 			<li>{{team.two}}</li>
-		</ul>
+        </ul>
+        <h1>计算属性{{sum}}</h1>
     </div>
 </body>
 <!-- <script src="compile.js"></script>
@@ -45,6 +46,8 @@
         this.$option = option;
         let data = this._data = this.$option.data;
         //给data做数据劫持，加上get /set   
+
+        initComputed.call(this) // 就相当于把Mvvm的实例 vm initCOmputed, 它可以使用Mvvm的方法，变相继承了
         new Observe(data);
         //console.log(data);
         new Compile(option.el, this)
@@ -178,6 +181,18 @@
     // dep.addSub(watcher);
     // dep.notify()
 
+    //计算属性
+    function initComputed() {
+        console.log('jjj',this)
+        let vm = this;
+        let computed = vm.$option.computed;
+        Object.keys(computed).forEach(key => { // key就是 sum, loop这些
+            Object.defineProperty(vm._data, key, {
+                set() {},
+                get: typeof computed[key] === 'function' ? computed[key] : computed[key].get
+            })
+        })
+    }
 
 
 
@@ -190,7 +205,18 @@
           team: {
             one: 'bang',
             two: 'worf'
-          }
+          },
+          a: 1,
+          b: 3
+        },
+        computed: {
+            sum: function() {
+                return this._data.a + this._data.b
+            },
+
+            loop: function() {
+
+            }
         }
 
     })
